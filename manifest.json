@@ -1,0 +1,28 @@
+{
+  "name": "صيدلية الأمين الحديثة",
+  "short_name": "الأمين",
+  "description": "نظام إدارة النواقص والأصناف قريبة الانتهاء - صيدلية الأمين الحديثة",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F0FDFA",
+  "theme_color": "#5EEAD4",
+  "categories": ["medical", "productivity", "business"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

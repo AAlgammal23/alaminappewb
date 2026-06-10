@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>أداة هجرة البيانات - صيدلية الأمين</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: linear-gradient(135deg, #0f766e 0%, #0e7490 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #1e293b;
+    }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.2);
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #0f766e, #0e7490);
+      color: #fff;
+      padding: 24px;
+      text-align: center;
+    }
+    .header h1 { font-size: 24px; margin-bottom: 6px; }
+    .header p { opacity: .9; font-size: 14px; }
+    .content { padding: 24px; }
+    .step {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 20px;
+      padding: 16px;
+      background: #f8fafc;
+      border-radius: 10px;
+      border-right: 4px solid #0f766e;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      background: #0f766e;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+    .step-text { flex: 1; font-size: 15px; line-height: 1.7; }
+    .step-text code {
+      background: #e0f2fe;
+      color: #075985;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+    .upload-area {
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 40px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: .2s;
+      margin: 20px 0;
+    }
+    .upload-area:hover { border-color: #0f766e; background: #f0fdfa; }
+    .upload-area.has-file { border-color: #10b981; background: #f0fdf4; }
+    .upload-icon { font-size: 48px; margin-bottom: 10px; }
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: none;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: .2s;
+      font-family: inherit;
+    }
+    .btn-primary { background: #0f766e; color: #fff; }
+    .btn-primary:hover { background: #0e7490; }
+    .btn-primary:disabled { background: #94a3b8; cursor: not-allowed; }
+    .btn-danger { background: #dc2626; color: #fff; }
+    .btn-block { display: block; width: 100%; }
+    .preview {
+      background: #1e293b;
+      color: #a7f3d0;
+      padding: 16px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      max-height: 200px;
+      overflow: auto;
+      margin: 16px 0;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .stat {
+      background: #f0fdfa;
+      padding: 16px;
+      border-radius: 8px;
+      text-align: center;
+      border: 1px solid #99f6e4;
+    }
+    .stat-num { font-size: 28px; font-weight: bold; color: #0f766e; }
+    .stat-label { font-size: 12px; color: #475569; margin-top: 4px; }
+    .log {
+      background: #f8fafc;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 20px;
+      max-height: 200px;
+      overflow: auto;
+      font-size: 13px;
+      font-family: monospace;
+    }
+    .log-item { padding: 4px 0; }
+    .log-success { color: #059669; }
+    .log-error { color: #dc2626; }
+    .log-info { color: #0369a1; }
+    .hidden { display: none !important; }
+    input[type="file"] { display: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📦 أداة هجرة البيانات</h1>
+      <p>صيدلية الأمين الحديثة — نقل البيانات من ملف JSON إلى Firebase</p>
+    </div>
+
+    <div class="content">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">
+          <b>جهّز ملف JSON:</b><br>
+          من الموقع القديم (<code>dd3jvmx9kjo9.space.minimax.io</code>)،
+          اذهب إلى "النسخ الاحتياطي" ثم اضغط "📤 تصدير ملف JSON"
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">
+          <b>ارفع الملف هنا:</b><br>
+          اضغط على المربع بالأسفل واختر ملف الـ JSON
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">
+          <b>سجّل دخولك:</b><br>
+          سجّل دخول بحسابك أو الكود السري (نفس اللي تستخدمه في الموقع الجديد)
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-text">
+          <b>ابدأ الترحيل:</b><br>
+          اضغط "ابدأ الترحيل" وانتظر حتى يكتمل
+        </div>
+      </div>
+
+      <label for="file-input" class="upload-area" id="upload-area">
+        <div class="upload-icon">📁</div>
+        <div><b>اضغط لاختيار ملف JSON</b></div>
+        <div style="font-size: 13px; color: #64748b; margin-top: 6px">أو اسحب الملف وأفلته هنا</div>
+      </label>
+      <input type="file" id="file-input" accept=".json,application/json" />
+
+      <div id="preview-section" class="hidden">
+        <h3>📊 معاينة البيانات</h3>
+        <div class="stats" id="stats"></div>
+        <details>
+          <summary style="cursor: pointer; padding: 10px 0; font-weight: 600;">عرض محتوى الملف</summary>
+          <pre class="preview" id="preview"></pre>
+        </details>
+
+        <div class="step" style="margin-top: 20px;">
+          <div class="step-num">🔐</div>
+          <div class="step-text">
+            <b>سجّل دخولك للمتابعة:</b>
+            <input type="email" id="email" placeholder="البريد الإلكتروني" style="width: 100%; padding: 8px; margin-top: 8px; border: 1px solid #cbd5e1; border-radius: 6px;" />
+            <input type="password" id="password" placeholder="كلمة السر" style="width: 100%; padding: 8px; margin-top: 8px; border: 1px solid #cbd5e1; border-radius: 6px;" />
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-block" id="migrate-btn" disabled>🚀 ابدأ الترحيل إلى Firebase</button>
+        <button class="btn btn-danger btn-block" id="reset-btn" style="margin-top: 8px;">🗑️ إعادة تعيين</button>
+      </div>
+
+      <div id="log-section" class="hidden">
+        <h3>📋 سجل العمليات</h3>
+        <div class="log" id="log"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, set, serverTimestamp }
+      from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getAuth, signInWithEmailAndPassword, signInAnonymously }
+      from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { firebaseConfig } from "./firebase-config.js";
+
+    const app = initializeApp(firebaseConfig, 'migrate');
+    const db = getDatabase(app);
+    const auth = getAuth(app);
+
+    let fileData = null;
+    let currentUser = null;
+
+    const $ = (id) => document.getElementById(id);
+    const log = (msg, type = 'info') => {
+      const div = document.createElement('div');
+      div.className = `log-item log-${type}`;
+      div.textContent = `[${new Date().toLocaleTimeString('ar-EG')}] ${msg}`;
+      $('log').appendChild(div);
+      $('log').scrollTop = $('log').scrollHeight;
+    };
+
+    // رفع الملف
+    $('file-input').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          fileData = JSON.parse(e.target.result);
+          $('upload-area').classList.add('has-file');
+          $('upload-area').querySelector('div > b').textContent = `✅ ${file.name}`;
+          $('preview-section').classList.remove('hidden');
+          $('log-section').classList.remove('hidden');
+
+          // إحصائيات
+          const stats = [];
+          if (fileData.shortages) stats.push({ label: 'نواقص', n: Object.keys(fileData.shortages).length });
+          if (fileData.expiring) stats.push({ label: 'قرب الانتهاء', n: Object.keys(fileData.expiring).length });
+          if (fileData.patients) stats.push({ label: 'مرضى', n: Object.keys(fileData.patients).length });
+          if (fileData.log) stats.push({ label: 'عمليات', n: Object.keys(fileData.log).length });
+
+          $('stats').innerHTML = stats.map(s =>
+            `<div class="stat"><div class="stat-num">${s.n}</div><div class="stat-label">${s.label}</div></div>`
+          ).join('');
+
+          $('preview').textContent = JSON.stringify(fileData, null, 2).slice(0, 2000) + (JSON.stringify(fileData).length > 2000 ? '...' : '');
+          $('migrate-btn').disabled = false;
+          log(`تم تحميل الملف: ${file.name}`, 'success');
+        } catch (err) {
+          log('❌ ملف JSON غير صالح: ' + err.message, 'error');
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    // السحب والإفلات
+    const uploadArea = $('upload-area');
+    uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.style.background = '#f0fdfa'; });
+    uploadArea.addEventListener('dragleave', () => { uploadArea.style.background = ''; });
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.style.background = '';
+      $('file-input').files = e.dataTransfer.files;
+      $('file-input').dispatchEvent(new Event('change'));
+    });
+
+    // تسجيل الدخول
+    const doLogin = async () => {
+      const email = $('email').value.trim();
+      const password = $('password').value;
+      if (!email || !password) {
+        log('❌ أدخل البريد وكلمة السر', 'error');
+        return null;
+      }
+      try {
+        log('جاري تسجيل الدخول...', 'info');
+        const cred = await signInWithEmailAndPassword(auth, email, password);
+        log(`✅ تم الدخول: ${cred.user.email}`, 'success');
+        return cred.user;
+      } catch (err) {
+        log(`❌ فشل الدخول: ${err.message}`, 'error');
+        return null;
+      }
+    };
+
+    // الترحيل
+    $('migrate-btn').addEventListener('click', async () => {
+      $('migrate-btn').disabled = true;
+      $('migrate-btn').textContent = '⏳ جاري الترحيل...';
+
+      const user = await doLogin();
+      if (!user) {
+        $('migrate-btn').disabled = false;
+        $('migrate-btn').textContent = '🚀 ابدأ الترحيل إلى Firebase';
+        return;
+      }
+      currentUser = user;
+
+      try {
+        const uid = user.uid;
+        const baseRef = ref(db, `users/${uid}`);
+        log('جاري رفع البيانات...', 'info');
+
+        // رفع البيانات الرئيسية
+        const fields = ['shortages', 'expiring', 'patients', 'log', 'backups', 'meta', 'categories', 'companies'];
+        for (const field of fields) {
+          if (fileData[field]) {
+            await set(ref(db, `users/${uid}/${field}`), fileData[field]);
+            log(`✅ تم رفع ${field}`, 'success');
+          }
+        }
+
+        // إضافة سجل هجرة
+        await set(ref(db, `users/${uid}/log/migration_${Date.now()}`), {
+          action: 'data_migration',
+          timestamp: serverTimestamp(),
+          details: `هجرة من ملف JSON في ${new Date().toLocaleString('ar-EG')}`,
+          user: user.email
+        });
+
+        log('🎉 تمت الهجرة بنجاح! يمكنك الآن فتح الموقع الجديد.', 'success');
+        $('migrate-btn').textContent = '✅ تمت العملية';
+        $('migrate-btn').style.background = '#10b981';
+      } catch (err) {
+        log(`❌ فشلت الهجرة: ${err.message}`, 'error');
+        $('migrate-btn').disabled = false;
+        $('migrate-btn').textContent = '🚀 حاول مرة أخرى';
+      }
+    });
+
+    // إعادة تعيين
+    $('reset-btn').addEventListener('click', () => {
+      fileData = null;
+      $('preview-section').classList.add('hidden');
+      $('log-section').classList.add('hidden');
+      $('log').innerHTML = '';
+      $('file-input').value = '';
+      $('upload-area').classList.remove('has-file');
+      $('upload-area').querySelector('div > b').textContent = 'اضغط لاختيار ملف JSON';
+    });
+  </script>
+</body>
+</html>
