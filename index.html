@@ -11,700 +11,415 @@
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
   <link rel="stylesheet" href="styles.css" />
   <title>صيدلية الأمين الحديثة</title>
+  
+  <style>
+    /* Styles مدمجة للتأكد من عمل التطبيق */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0fdf4; }
+    .auth-screen { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #0f766e, #14b8a6); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+    .auth-card { background: white; border-radius: 24px; padding: 32px 24px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 20px 35px rgba(0,0,0,0.2); }
+    .auth-logo { width: 80px; height: 80px; margin-bottom: 16px; border-radius: 20px; }
+    .auth-title { color: #0f766e; margin-bottom: 8px; font-size: 24px; }
+    .auth-sub { color: #64748b; margin-bottom: 24px; font-size: 14px; }
+    .auth-tabs { display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid #e2e8f0; }
+    .auth-tab { flex: 1; background: none; border: none; padding: 10px; cursor: pointer; color: #64748b; font-weight: 500; transition: all 0.2s; }
+    .auth-tab.active { color: #0f766e; border-bottom: 2px solid #0f766e; }
+    .auth-form { display: flex; flex-direction: column; gap: 16px; }
+    .form__label { display: flex; flex-direction: column; gap: 6px; text-align: right; font-size: 14px; font-weight: 500; color: #334155; }
+    .form__label input, .form__label select, .form__label textarea { padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 14px; font-family: inherit; }
+    .btn { padding: 10px 16px; border-radius: 12px; border: none; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.2s; }
+    .btn--primary { background: #0f766e; color: white; }
+    .btn--primary:hover { background: #0d5c56; }
+    .btn--ghost { background: transparent; border: 1px solid #cbd5e1; }
+    .btn--block { width: 100%; }
+    .btn--danger { background: #dc2626; color: white; }
+    .hidden { display: none !important; }
+    .app-shell { max-width: 1200px; margin: 0 auto; padding: 16px; }
+    .sync-bar { background: #e2e8f0; padding: 8px 16px; border-radius: 20px; display: flex; justify-content: space-between; margin-bottom: 16px; font-size: 12px; }
+    .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; background: white; padding: 8px; border-radius: 20px; }
+    .tab { padding: 10px 16px; background: none; border: none; border-radius: 16px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .tab.active { background: #0f766e; color: white; }
+    .card { background: white; border-radius: 20px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 12px 24px; border-radius: 40px; z-index: 2000; font-size: 14px; }
+    .loading-spinner { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); color: white; padding: 20px; border-radius: 16px; z-index: 3000; text-align: center; }
+    .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #0f766e; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 10px; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
 </head>
 <body>
-  <!-- شاشة تسجيل الدخول -->
-  <div id="auth-screen" class="auth-screen">
-    <div class="auth-card">
-      <img src="icons/logo-hires.png" alt="شعار صيدلية الأمين الحديثة" class="auth-logo" />
-      <h1 class="auth-title">صيدلية الأمين الحديثة</h1>
-      <p class="auth-sub">نظام إدارة النواقص وقرب الانتهاء</p>
 
-      <!-- تبويبات تسجيل الدخول -->
-      <div class="auth-tabs">
-        <button class="auth-tab active" data-auth-tab="login">دخول</button>
-        <button class="auth-tab" data-auth-tab="register">حساب جديد</button>
-        <button class="auth-tab" data-auth-tab="code">كود سريع</button>
-      </div>
+<!-- شاشة تسجيل الدخول -->
+<div id="auth-screen" class="auth-screen">
+  <div class="auth-card">
+    <img src="icons/logo-hires.png" alt="شعار صيدلية الأمين الحديثة" class="auth-logo" onerror="this.src='https://via.placeholder.com/80?text=Alamin'" />
+    <h1 class="auth-title">صيدلية الأمين الحديثة</h1>
+    <p class="auth-sub">نظام إدارة النواقص وقرب الانتهاء</p>
 
-      <!-- تسجيل دخول -->
-      <form id="auth-login" class="auth-form">
-        <label class="form__label">
-          <span>📧 البريد الإلكتروني</span>
-          <input type="email" id="login-email" required placeholder="example@pharmacy.com" autocomplete="email" />
-        </label>
-        <label class="form__label">
-          <span>🔒 كلمة السر</span>
-          <input type="password" id="login-password" required placeholder="6 أحرف على الأقل" autocomplete="current-password" />
-        </label>
-        <button type="submit" class="btn btn--primary btn--block">دخول ومزامنة</button>
-        <button type="button" id="forgot-password" class="btn btn--ghost btn--block" style="margin-top:8px">نسيت كلمة السر؟</button>
-        <div id="login-error" class="auth-error hidden"></div>
-      </form>
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-auth-tab="login">دخول</button>
+      <button class="auth-tab" data-auth-tab="register">حساب جديد</button>
+      <button class="auth-tab" data-auth-tab="code">كود سريع</button>
+    </div>
 
-      <!-- إنشاء حساب -->
-      <form id="auth-register" class="auth-form hidden">
-        <label class="form__label">
-          <span>👤 الاسم الكامل</span>
-          <input type="text" id="reg-name" required placeholder="اسم الصيدلي/المدير" autocomplete="name" />
-        </label>
-        <label class="form__label">
-          <span>📧 البريد الإلكتروني</span>
-          <input type="email" id="reg-email" required placeholder="example@pharmacy.com" autocomplete="email" />
-        </label>
-        <label class="form__label">
-          <span>🔒 كلمة السر (6 أحرف على الأقل)</span>
-          <input type="password" id="reg-password" required minlength="6" placeholder="كلمة سر قوية" autocomplete="new-password" />
-        </label>
-        <label class="form__label">
-          <span>🔒 تأكيد كلمة السر</span>
-          <input type="password" id="reg-password2" required minlength="6" placeholder="أعد كتابة كلمة السر" autocomplete="new-password" />
-        </label>
-        <button type="submit" class="btn btn--primary btn--block">إنشاء الحساب وبدء المزامنة</button>
-        <div id="reg-error" class="auth-error hidden"></div>
-      </form>
+    <form id="auth-login" class="auth-form">
+      <label class="form__label">
+        <span>📧 البريد الإلكتروني</span>
+        <input type="email" id="login-email" required placeholder="example@pharmacy.com" />
+      </label>
+      <label class="form__label">
+        <span>🔒 كلمة السر</span>
+        <input type="password" id="login-password" required placeholder="6 أحرف على الأقل" />
+      </label>
+      <button type="submit" class="btn btn--primary btn--block">دخول ومزامنة</button>
+      <div id="login-error" class="auth-error hidden" style="color:red; font-size:12px;"></div>
+    </form>
 
-      <!-- كود سريع (الطريقة القديمة) -->
-      <form id="auth-code" class="auth-form hidden">
-        <label class="form__label">
-          <span>🔐 الكود السري للصيدلية</span>
-          <input type="text" id="pharmacy-code" placeholder="مثال: alamin2026" autocomplete="off" />
-        </label>
-        <p class="auth-hint">نفس الكود يُستخدم على جميع الأجهزة لمشاركة نفس البيانات</p>
-        <button type="submit" class="btn btn--primary btn--block">دخول ومزامنة</button>
-        <div id="code-error" class="auth-error hidden"></div>
-      </form>
+    <form id="auth-register" class="auth-form hidden">
+      <label class="form__label">
+        <span>👤 الاسم الكامل</span>
+        <input type="text" id="reg-name" required />
+      </label>
+      <label class="form__label">
+        <span>📧 البريد الإلكتروني</span>
+        <input type="email" id="reg-email" required />
+      </label>
+      <label class="form__label">
+        <span>🔒 كلمة السر (6 أحرف)</span>
+        <input type="password" id="reg-password" required minlength="6" />
+      </label>
+      <label class="form__label">
+        <span>🔒 تأكيد كلمة السر</span>
+        <input type="password" id="reg-password2" required minlength="6" />
+      </label>
+      <button type="submit" class="btn btn--primary btn--block">إنشاء الحساب</button>
+      <div id="reg-error" class="auth-error hidden" style="color:red; font-size:12px;"></div>
+    </form>
 
-      <div class="auth-footer">
-        <small>الإصدار 4.0 · نسخ احتياطي سحابي مشفّر</small>
-      </div>
+    <form id="auth-code" class="auth-form hidden">
+      <label class="form__label">
+        <span>🔐 الكود السري للصيدلية</span>
+        <input type="text" id="pharmacy-code" placeholder="مثال: alamin2026" />
+      </label>
+      <button type="submit" class="btn btn--primary btn--block">دخول ومزامنة</button>
+      <div id="code-error" class="auth-error hidden" style="color:red; font-size:12px;"></div>
+    </form>
+
+    <div class="auth-footer" style="margin-top: 20px; font-size: 11px; color: #94a3b8;">
+      <small>الإصدار 4.0 · نسخ احتياطي سحابي مشفّر</small>
     </div>
   </div>
-
-  <!-- شاشة التطبيق الرئيسية -->
-  <div id="app-shell" class="app-shell hidden">
-  <!-- شريط التثبيت -->
-  <div id="install-banner" class="install-banner hidden">
-    <div class="install-banner__text">
-      <strong>ثبّت التطبيق على جهازك</strong>
-      <span>للوصول السريع من الشاشة الرئيسية</span>
-    </div>
-    <div class="install-banner__actions">
-      <button id="install-btn" class="btn btn--primary btn--sm">تثبيت</button>
-      <button id="dismiss-install" class="btn btn--ghost btn--sm">لاحقاً</button>
-    </div>
-  </div>
-
-  <!-- الترويسة -->
-  <header class="app-header">
-    <!-- شريط حالة المزامنة -->
-    <div id="sync-bar" class="sync-bar">
-      <div class="sync-bar__left">
-        <span class="sync-dot" id="sync-dot"></span>
-        <span id="sync-text">جاهز</span>
-      </div>
-      <div class="sync-bar__right">
-        <span id="sync-pharmacy" class="sync-pharmacy"></span>
-        <button id="logout-btn" class="sync-logout" title="تسجيل الخروج">🚪</button>
-      </div>
-    </div>
-
-    <div class="app-header__top">
-      <div class="app-header__brand">
-        <img src="icons/logo-hires.png" alt="شعار صيدلية الأمين الحديثة" class="brand-logo" />
-        <div>
-          <h1 class="brand-name">صيدلية الأمين الحديثة</h1>
-          <p class="brand-sub">نظام إدارة النواقص وقرب الانتهاء</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- التبويبات -->
-    <nav class="tabs" role="tablist">
-      <button class="tab active" data-tab="shortages" role="tab">
-        <span class="tab__icon">📋</span>
-        <span class="tab__label">النواقص</span>
-        <span class="badge" id="badge-shortages">0</span>
-      </button>
-      <button class="tab" data-tab="expiring" role="tab">
-        <span class="tab__icon">⏰</span>
-        <span class="tab__label">قرب الانتهاء</span>
-        <span class="badge" id="badge-expiring">0</span>
-      </button>
-      <button class="tab" data-tab="patients" role="tab">
-        <span class="tab__icon">💊</span>
-        <span class="tab__label">المرضى</span>
-        <span class="badge" id="badge-patients" hidden>0</span>
-      </button>
-      <button class="tab" data-tab="alerts" role="tab">
-        <span class="tab__icon">🔔</span>
-        <span class="tab__label">التنبيهات</span>
-        <span class="badge" id="badge-alerts" hidden>0</span>
-      </button>
-      <button class="tab" data-tab="log" role="tab">
-        <span class="tab__icon">📜</span>
-        <span class="tab__label">السجل</span>
-      </button>
-      <button class="tab" data-tab="backup" role="tab">
-        <span class="tab__icon">💾</span>
-        <span class="tab__label">النسخ</span>
-      </button>
-      <button class="tab" data-tab="info" role="tab">
-        <span class="tab__icon">📞</span>
-        <span class="tab__label">التواصل</span>
-      </button>
-    </nav>
-  </header>
-
-  <!-- المحتوى الرئيسي -->
-  <main class="app-main">
-
-    <!-- لوحة النواقص -->
-    <section id="tab-shortages" class="tab-panel active">
-      <div class="panel-header">
-        <div>
-          <h2 class="panel-title">قائمة النواقص</h2>
-          <p class="panel-sub">أضف الأصناف الناقصة وشاركها عبر واتساب</p>
-        </div>
-        <button id="add-shortage" class="btn btn--primary">
-          <span>＋</span> إضافة ناقص
-        </button>
-      </div>
-
-      <!-- فلاتر -->
-      <div class="filters">
-        <input type="text" id="filter-shortages" class="filters__search" placeholder="🔍 بحث في النواقص..." />
-        <select id="filter-shortages-cat" class="filters__select">
-          <option value="">كل الفئات</option>
-        </select>
-        <select id="filter-shortages-priority" class="filters__select" title="فلتر الأولوية">
-          <option value="">كل الأولويات</option>
-          <option value="urgent">🔴 عاجل</option>
-          <option value="medium">🟡 متوسط</option>
-          <option value="normal">🟢 عادي</option>
-        </select>
-      </div>
-
-      <!-- نموذج إضافة ناقص -->
-      <form id="form-shortage" class="card form hidden">
-        <h3 class="form__title">إضافة صنف ناقص</h3>
-        <div class="form__row">
-          <label class="form__label">
-            <span>اسم الصنف *</span>
-            <input type="text" name="name" required placeholder="مثال: بنادول إكسترا" />
-          </label>
-          <label class="form__label">
-            <span>الكمية المطلوبة</span>
-            <input type="number" name="quantity" min="1" value="1" />
-          </label>
-        </div>
-        <div class="form__row">
-          <label class="form__label">
-            <span>الحد الأدنى (للتنبيه)</span>
-            <input type="number" name="minStock" min="0" placeholder="مثال: 5" />
-          </label>
-          <label class="form__label">
-            <span>الكمية الحالية</span>
-            <input type="number" name="currentStock" min="0" value="0" />
-          </label>
-        </div>
-        <div class="form__row">
-          <label class="form__label">
-            <span>الفئة الدوائية</span>
-            <input type="text" name="category" list="categories-list" placeholder="اختر أو اكتب" />
-            <datalist id="categories-list"></datalist>
-          </label>
-          <label class="form__label">
-            <span>الشركة المُصنّعة</span>
-            <input type="text" name="company" list="companies-list" placeholder="اختر أو اكتب" />
-            <datalist id="companies-list"></datalist>
-          </label>
-        </div>
-        <div class="form__row">
-          <label class="form__label">
-            <span>الأولوية</span>
-            <select name="priority" class="priority-select">
-              <option value="urgent">🔴 عاجل</option>
-              <option value="medium" selected>🟡 متوسط</option>
-              <option value="normal">🟢 عادي</option>
-            </select>
-          </label>
-          <label class="form__label">
-            <span>سبب النقص</span>
-            <select name="reason">
-              <option value="">— بدون —</option>
-              <option value="out_of_stock">نفاد المخزون</option>
-              <option value="high_demand">طلب متزايد</option>
-              <option value="supplier_delay">تأخر المورد</option>
-              <option value="seasonal">موسمي</option>
-              <option value="other">أخرى</option>
-            </select>
-          </label>
-        </div>
-        <div class="form__row">
-          <label class="form__label">
-            <span>المورد المفضل</span>
-            <input type="text" name="supplier" list="suppliers-list" placeholder="اسم المورد" />
-            <datalist id="suppliers-list"></datalist>
-          </label>
-          <label class="form__label">
-            <span>آخر سعر شراء</span>
-            <input type="number" name="lastPrice" min="0" step="0.01" placeholder="ر.ي" />
-          </label>
-        </div>
-        <label class="form__label">
-          <span>ملاحظات</span>
-          <textarea name="notes" rows="2" placeholder="اختياري..."></textarea>
-        </label>
-        <div class="form__actions">
-          <button type="button" class="btn btn--ghost" data-cancel>إلغاء</button>
-          <button type="submit" class="btn btn--primary">حفظ</button>
-        </div>
-      </form>
-
-      <div id="shortages-list" class="list">
-        <div class="empty">
-          <div class="empty__icon">📦</div>
-          <p>لا توجد نواقص مسجلة. ابدأ بإضافة صنف ناقص.</p>
-        </div>
-      </div>
-
-      <div id="shortages-actions" class="bottom-actions hidden">
-        <button id="clear-shortages" class="btn btn--danger">🗑️ مسح الكل</button>
-        <button id="share-purchase" class="btn btn--primary">📋 طلبية شراء</button>
-        <button id="share-shortages" class="btn btn--whatsapp">
-          <span>📱</span> واتساب
-        </button>
-      </div>
-    </section>
-
-    <!-- لوحة قرب الانتهاء -->
-    <section id="tab-expiring" class="tab-panel">
-      <div class="panel-header">
-        <div>
-          <h2 class="panel-title">الأصناف قريبة الانتهاء</h2>
-          <p class="panel-sub">تابع تواريخ الصلاحية لتجنب الهدر</p>
-        </div>
-        <button id="add-expiring" class="btn btn--primary">
-          <span>＋</span> إضافة صنف
-        </button>
-      </div>
-
-      <form id="form-expiring" class="card form hidden">
-        <h3 class="form__title">إضافة صنف قارب على الانتهاء</h3>
-        <div class="form__row">
-          <label class="form__label">
-            <span>اسم الصنف *</span>
-            <input type="text" name="name" required placeholder="مثال: فيتامين C" />
-          </label>
-          <label class="form__label">
-            <span>الكمية</span>
-            <input type="number" name="quantity" min="1" value="1" />
-          </label>
-        </div>
-        <div class="form__row">
-          <label class="form__label">
-            <span>تاريخ الانتهاء *</span>
-            <input type="date" name="expiryDate" required />
-          </label>
-          <label class="form__label">
-            <span>رقم الدفعة</span>
-            <input type="text" name="batch" placeholder="اختياري" />
-          </label>
-        </div>
-        <label class="form__label">
-          <span>ملاحظات</span>
-          <textarea name="notes" rows="2" placeholder="اختياري..."></textarea>
-        </label>
-        <div class="form__actions">
-          <button type="button" class="btn btn--ghost" data-cancel>إلغاء</button>
-          <button type="submit" class="btn btn--primary">حفظ</button>
-        </div>
-      </form>
-
-      <div id="expiring-list" class="list">
-        <div class="empty">
-          <div class="empty__icon">⏰</div>
-          <p>لا توجد أصناف قريبة الانتهاء مسجلة.</p>
-        </div>
-      </div>
-
-      <div id="expiring-actions" class="bottom-actions hidden">
-        <button id="clear-expiring" class="btn btn--danger">🗑️ مسح الكل</button>
-        <button id="share-expiring" class="btn btn--whatsapp">
-          <span>📱</span> مشاركة عبر واتساب
-        </button>
-      </div>
-    </section>
-
-    <!-- لوحة المرضى المزمنين -->
-    <section id="tab-patients" class="tab-panel">
-      <div class="panel-header">
-        <div>
-          <h2 class="panel-title">قسم مرضى الأمراض المزمنة</h2>
-          <p class="panel-sub">متابعة أدوية العملاء وتذكيرهم بمواعيد الصرف</p>
-        </div>
-        <button id="add-patient" class="btn btn--primary">
-          <span>＋</span> إضافة مريض
-        </button>
-      </div>
-
-      <!-- فلاتر -->
-      <div class="filters">
-        <input type="text" id="filter-patients" class="filters__search" placeholder="🔍 بحث عن مريض..." />
-        <select id="filter-patients-cond" class="filters__select">
-          <option value="">كل الأمراض</option>
-        </select>
-      </div>
-
-      <!-- نموذج إضافة/تعديل مريض -->
-      <form id="form-patient" class="card form hidden">
-        <h3 class="form__title">إضافة مريض جديد</h3>
-        <h4 class="form__section">👤 بيانات المريض</h4>
-        <div class="form__row">
-          <label class="form__label">
-            <span>الاسم *</span>
-            <input type="text" name="name" required placeholder="اسم المريض" />
-          </label>
-          <label class="form__label">
-            <span>رقم الهاتف *</span>
-            <input type="tel" name="phone" required placeholder="+9677xxxxxxxx" />
-          </label>
-        </div>
-        <div class="form__row">
-          <label class="form__label">
-            <span>العمر</span>
-            <input type="number" name="age" min="0" max="120" placeholder="اختياري" />
-          </label>
-          <label class="form__label">
-            <span>العنوان</span>
-            <input type="text" name="address" placeholder="اختياري" />
-          </label>
-        </div>
-        <label class="form__label">
-          <span>ملاحظات خاصة</span>
-          <textarea name="notes" rows="2" placeholder="حساسية من دواء معين، تفضيلات..."></textarea>
-        </label>
-
-        <h4 class="form__section">🩺 الحالة المرضية</h4>
-        <div id="conditions-picker" class="conditions-picker"></div>
-        <label class="form__label" style="margin-top:8px">
-          <span>حالة مخصصة (اختياري)</span>
-          <input type="text" name="customCondition" placeholder="اكتب حالة أخرى" />
-        </label>
-
-        <h4 class="form__section">💊 الأدوية الشهرية</h4>
-        <div id="medications-list" class="medications-list"></div>
-        <button type="button" id="add-medication" class="btn btn--ghost btn--sm">＋ إضافة دواء</button>
-
-        <h4 class="form__section">📅 إعدادات التذكير</h4>
-        <div class="form__row">
-          <label class="form__label">
-            <span>التذكير قبل (أيام)</span>
-            <select name="reminderDays">
-              <option value="3">3 أيام</option>
-              <option value="5" selected>5 أيام</option>
-              <option value="7">7 أيام</option>
-            </select>
-          </label>
-          <label class="form__label">
-            <span>دورة الصرف (أيام)</span>
-            <input type="number" name="cycleDays" value="30" min="15" max="90" />
-          </label>
-        </div>
-
-        <div class="form__actions">
-          <button type="button" class="btn btn--ghost" data-cancel>إلغاء</button>
-          <button type="submit" class="btn btn--primary">حفظ</button>
-        </div>
-      </form>
-
-      <!-- قائمة المرضى -->
-      <div id="patients-list" class="list"></div>
-
-      <div id="patients-actions" class="bottom-actions hidden">
-        <button id="share-overdue" class="btn btn--primary">📱 تذكير المتأخرين</button>
-        <button id="export-patients" class="btn btn--ghost">📤 تصدير البيانات</button>
-      </div>
-    </section>
-
-    <!-- تفاصيل المريض (شاشة منبثقة) -->
-    <div id="patient-modal" class="modal hidden">
-      <div class="modal__backdrop"></div>
-      <div class="modal__content modal__content--lg" id="patient-modal-content"></div>
-    </div>
-
-    <!-- لوحة التنبيهات -->
-    <section id="tab-alerts" class="tab-panel">
-      <div class="panel-header">
-        <div>
-          <h2 class="panel-title">التنبيهات الذكية</h2>
-          <p class="panel-sub">أصناف وصلت للحد الأدنى أو قاربت صلاحيتها على الانتهاء</p>
-        </div>
-        <button id="dismiss-all-alerts" class="btn btn--ghost btn--sm">إخفاء الكل</button>
-      </div>
-
-      <div id="alerts-list" class="alerts-list"></div>
-    </section>
-
-    <!-- لوحة النسخ الاحتياطي -->
-    <section id="tab-backup" class="tab-panel">
-      <div class="panel-header">
-        <div>
-          <h2 class="panel-title">النسخ الاحتياطي والمزامنة</h2>
-          <p class="panel-sub">حفظ واستعادة البيانات بأمان</p>
-        </div>
-        <div id="backup-status-pill" class="backup-pill">⚪ غير محفوظ</div>
-      </div>
-
-      <!-- حالة المزامنة -->
-      <div class="card backup-status-card">
-        <h3 class="backup-status__title">📊 حالة المزامنة</h3>
-        <div class="backup-stats">
-          <div class="backup-stat">
-            <div class="backup-stat__label">آخر مزامنة سحابية</div>
-            <div class="backup-stat__value" id="last-cloud-sync">— لم تتم بعد —</div>
-          </div>
-          <div class="backup-stat">
-            <div class="backup-stat__label">آخر نسخة احتياطية</div>
-            <div class="backup-stat__value" id="last-backup-time">— لم تتم بعد —</div>
-          </div>
-          <div class="backup-stat">
-            <div class="backup-stat__label">عدد النسخ المحفوظة</div>
-            <div class="backup-stat__value" id="backup-count">0</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- الإجراءات السريعة -->
-      <div class="card">
-        <h3 class="backup-actions__title">⚡ إجراءات سريعة</h3>
-        <div class="backup-actions">
-          <button id="backup-now" class="btn btn--primary">
-            <span>☁️</span> نسخ احتياطي الآن
-          </button>
-          <button id="restore-latest" class="btn btn--ghost">
-            <span>🔄</span> استعادة آخر نسخة
-          </button>
-          <button id="export-json" class="btn btn--ghost">
-            <span>📤</span> تصدير ملف JSON
-          </button>
-          <label class="btn btn--ghost" style="cursor:pointer">
-            <span>📥</span> استيراد ملف JSON
-            <input type="file" id="import-json" accept=".json" style="display:none" />
-          </label>
-        </div>
-        <p class="backup-note">💡 البيانات تُحفظ تلقائياً في السحابة مع كل تعديل. لا حاجة للنسخ اليدوي إلا إذا أردت نسخة إضافية.</p>
-      </div>
-
-      <!-- سجل النسخ -->
-      <div class="card">
-        <h3 class="backup-actions__title">📜 سجل النسخ الاحتياطية</h3>
-        <div id="backup-log" class="backup-log"></div>
-      </div>
-    </section>
-
-    <!-- لوحة السجل -->
-    <section id="tab-log" class="tab-panel">
-      <div class="panel-header">
-        <div>
-          <h2 class="panel-title">سجل العمليات</h2>
-          <p class="panel-sub">آخر 200 عملية على النظام</p>
-        </div>
-        <button id="clear-log" class="btn btn--danger btn--sm">مسح السجل</button>
-      </div>
-
-      <div id="log-list" class="log-list"></div>
-    </section>
-
-    <!-- لوحة التواصل -->
-    <section id="tab-info" class="tab-panel">
-      <div class="panel-header">
-        <div>
-          <h2 class="panel-title">معلومات التواصل</h2>
-          <p class="panel-sub">صيدلية الأمين الحديثة</p>
-        </div>
-      </div>
-
-      <div class="contact-card card">
-        <h3 class="contact-card__title">📍 معلومات رسمية</h3>
-        <ul class="contact-list">
-          <li>
-            <span class="contact-list__icon">💬</span>
-            <div>
-              <strong>واتساب</strong>
-              <a href="https://wa.me/967774973636" target="_blank" rel="noopener">+967 774 973 636</a>
-            </div>
-          </li>
-          <li>
-            <span class="contact-list__icon">📞</span>
-            <div>
-              <strong>الهاتف</strong>
-              <a href="tel:+967774973636">+967 774 973 636</a>
-            </div>
-          </li>
-          <li>
-            <span class="contact-list__icon">✉️</span>
-            <div>
-              <strong>البريد الإلكتروني</strong>
-              <a href="mailto:alaminmodern.ph@gmail.com">alaminmodern.ph@gmail.com</a>
-            </div>
-          </li>
-          <li>
-            <span class="contact-list__icon">📍</span>
-            <div>
-              <strong>العنوان</strong>
-              <span>اليمن - إب - مدينة القاعدة</span>
-            </div>
-          </li>
-          <li>
-            <span class="contact-list__icon">👍</span>
-            <div>
-              <strong>فيسبوك</strong>
-              <a href="https://www.facebook.com/share/18BNE6VzVK/" target="_blank" rel="noopener">صفحتنا على فيسبوك</a>
-            </div>
-          </li>
-        </ul>
-      </div>
-
-      <div class="card danger-zone">
-        <h3 class="danger-zone__title">⚠️ منطقة الخطر</h3>
-        <p>حذف جميع البيانات المحفوظة على هذا الجهاز. لا يمكن التراجع عن هذا الإجراء.</p>
-        <button id="reset-all" class="btn btn--danger btn--block">🗑️ حذف جميع البيانات</button>
-      </div>
-    </section>
-  </main>
-
-  </div><!-- /app-shell -->
-
-  <!-- نافذة تأكيد -->
-  <div id="confirm-modal" class="modal hidden">
-    <div class="modal__backdrop"></div>
-    <div class="modal__content">
-      <h3 id="confirm-title" class="modal__title">تأكيد</h3>
-      <p id="confirm-message" class="modal__message">هل أنت متأكد؟</p>
-      <div class="modal__actions">
-        <button id="confirm-cancel" class="btn btn--ghost">إلغاء</button>
-        <button id="confirm-ok" class="btn btn--danger">نعم، متابعة</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- الإشعارات -->
-  <div id="toast" class="toast hidden"></div>
-
-  <script type="module" src="app.js"></script>
-<style>
-#minimax-floating-ball {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  padding: 10px 12px;
-  background: #222222;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  color: #F8F8F8;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  z-index: 9999;
-  transition: all 0.3s ease;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-#minimax-floating-ball:hover {
-  transform: translateY(-2px);
-  background: #383838;
-}
-.minimax-ball-content {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.minimax-logo-wave {
-  width: 20px;
-  height: 20px;
-  background-image: url("data:image/svg+xml,%3Csvg%20preserveAspectRatio%3D%27none%27%20width%3D%27100%25%27%20height%3D%27100%25%27%20overflow%3D%27visible%27%20style%3D%27display%3A%20block%3B%27%20viewBox%3D%270%200%20170.136%20138.225%27%20fill%3D%27none%27%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%3E%3Cg%20id%3D%27Frame%202116748449%27%3E%3Cpath%20id%3D%27Subtract%27%20d%3D%27M170%20101.783C170%20105.144%20168.49%20108.327%20165.886%20110.453L134.963%20135.702C132.964%20137.334%20130.463%20138.225%20127.883%20138.225H10.4938C4.69824%20138.225%200%20133.527%200%20127.732V39.2289C0%2035.8597%201.51758%2032.6698%204.13162%2030.5442L38.5402%202.56547C40.536%200.942662%2043.0298%200.0567377%2045.602%200.0567377H159.506C165.302%200.0567377%20170%204.75498%20170%2010.5506V101.783Z%27%20fill%3D%27black%27%20style%3D%27fill%3Ablack%3Bfill-opacity%3A1%3B%27/%3E%3Cpath%20id%3D%27Subtract_2%27%20d%3D%27M149.011%2094.4632C149.011%2096.1471%20148.253%2097.7415%20146.946%2098.8043L125.893%20115.936C124.895%20116.748%20123.648%20117.191%20122.361%20117.191H24.6479C22.716%20117.191%2021.15%20115.625%2021.15%20113.693V46.1166C21.15%2044.4267%2021.9135%2042.8274%2023.2274%2041.7648L47.367%2022.2437C48.3638%2021.4376%2049.607%2020.9982%2050.8888%2020.9988L145.514%2021.0427C147.446%2021.0436%20149.011%2022.6094%20149.011%2024.5406V94.4632Z%27%20fill%3D%27white%27%20style%3D%27fill%3Awhite%3Bfill-opacity%3A1%3B%27/%3E%3Cpath%20id%3D%27Rectangle%20111142564%27%20d%3D%27M42.111%2080.8025C42.111%2077.7115%2044.6167%2075.2057%2047.7077%2075.2057H60.9999C64.0908%2075.2057%2066.5966%2077.7115%2066.5966%2080.8025V121.029H42.111V80.8025Z%27%20fill%3D%27black%27%20style%3D%27fill%3Ablack%3Bfill-opacity%3A1%3B%27/%3E%3Cpath%20id%3D%27Rectangle%20111142567%27%20d%3D%27M79.1894%2080.8025C79.1894%2077.7115%2081.6952%2075.2057%2084.7861%2075.2057H98.0783C101.169%2075.2057%20103.675%2077.7115%20103.675%2080.8025V121.029H79.1894V80.8025Z%27%20fill%3D%27black%27%20style%3D%27fill%3Ablack%3Bfill-opacity%3A1%3B%27/%3E%3C/g%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 14px 11px;
-  background-color: #8FD1FF;
-  border-radius: 4px;
-}
-
-.minimax-ball-text {
-  font-size: 12px;
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.minimax-close-icon {
-  margin-left: 8px;
-  font-size: 16px;
-  width: 18px;
-  height: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  cursor: pointer;
-  opacity: 0.7;
-  transition: opacity 0.2s ease;
-}
-
-.minimax-close-icon:hover {
-  opacity: 1;
-}
-</style>
-<div id="minimax-floating-ball">
-  <div class="minimax-ball-content">
-    <div class="minimax-logo-wave"></div>
-    <span class="minimax-ball-text">alamin modern pharmacy7</span>
-  </div>
-  <div class="minimax-close-icon">×</div>
 </div>
+
+<!-- شاشة التطبيق الرئيسية -->
+<div id="app-shell" class="app-shell hidden">
+  <div id="sync-bar" class="sync-bar">
+    <div class="sync-bar__left">
+      <span id="sync-dot">🟢</span>
+      <span id="sync-text">جاهز</span>
+    </div>
+    <div class="sync-bar__right">
+      <span id="sync-pharmacy"></span>
+      <button id="logout-btn" style="background:none; border:none; cursor:pointer;">🚪</button>
+    </div>
+  </div>
+
+  <div class="tabs" id="main-tabs">
+    <button class="tab" data-tab="shortages">📋 النواقص</button>
+    <button class="tab" data-tab="expiring">⏰ قرب الانتهاء</button>
+    <button class="tab" data-tab="patients">💊 المرضى</button>
+    <button class="tab" data-tab="backup">💾 النسخ</button>
+    <button class="tab" data-tab="info">📞 التواصل</button>
+  </div>
+
+  <div id="tab-shortages" class="tab-panel">
+    <div class="card">
+      <h3>قائمة النواقص</h3>
+      <button id="add-shortage-btn" class="btn btn--primary" style="margin: 10px 0;">+ إضافة صنف ناقص</button>
+      <div id="shortages-list">لا توجد نواقص</div>
+    </div>
+  </div>
+
+  <div id="tab-expiring" class="tab-panel hidden">
+    <div class="card">
+      <h3>الأصناف قريبة الانتهاء</h3>
+      <button id="add-expiring-btn" class="btn btn--primary" style="margin: 10px 0;">+ إضافة صنف</button>
+      <div id="expiring-list">لا توجد أصناف</div>
+    </div>
+  </div>
+
+  <div id="tab-patients" class="tab-panel hidden">
+    <div class="card">
+      <h3>مرضى الأمراض المزمنة</h3>
+      <button id="add-patient-btn" class="btn btn--primary" style="margin: 10px 0;">+ إضافة مريض</button>
+      <div id="patients-list">لا يوجد مرضى</div>
+    </div>
+  </div>
+
+  <div id="tab-backup" class="tab-panel hidden">
+    <div class="card">
+      <h3>النسخ الاحتياطي والمزامنة</h3>
+      <button id="sync-now-btn" class="btn btn--primary">مزامنة مع السحابة الآن</button>
+      <p id="backup-status" style="margin-top: 10px;">⏳ جاهز للمزامنة</p>
+    </div>
+  </div>
+
+  <div id="tab-info" class="tab-panel hidden">
+    <div class="card">
+      <h3>معلومات التواصل</h3>
+      <p>صيدلية الأمين الحديثة</p>
+      <p>اليمن - إب - مدينة القاعدة</p>
+      <p>📧 alaminmodern.ph@gmail.com</p>
+      <p>📞 +967 774 973 636</p>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+<div id="loading-spinner" class="loading-spinner hidden">
+  <div class="spinner"></div>
+  <p>جاري المزامنة...</p>
+</div>
+
 <script>
-// Initialize floating ball functionality
-function initFloatingBall() {
-  const ball = document.getElementById('minimax-floating-ball');
-  if (!ball) return;
+  // ============= إعدادات Firebase (المعدلة بالبيانات الصحيحة) =============
+  const firebaseConfig = {
+    apiKey: "AIzaSyCl5QeW5h5S9Q3ATKZFYHFfK10J2eVVK5s",
+    authDomain: "alamin-pharmacy.firebaseapp.com",
+    databaseURL: "https://alamin-pharmacy-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "alamin-pharmacy",
+    storageBucket: "alamin-pharmacy.firebasestorage.app",
+    messagingSenderId: "846568696134",
+    appId: "1:846568696134:web:857edc96de8aa3383b5d47",
+    measurementId: "G-N2WEW5GR62"
+  };
+  // ========================================================================
 
-  // Initial animation
-  ball.style.opacity = '0';
-  ball.style.transform = 'translateY(20px)';
+  let currentUser = null;
 
-  setTimeout(() => {
-    ball.style.opacity = '1';
-    ball.style.transform = 'translateY(0)';
-  }, 500);
+  // دوال مساعدة
+  function showToast(msg, type = 'info') {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.remove('hidden');
+    setTimeout(() => toast.classList.add('hidden'), 3000);
+  }
 
-  // Handle logo click
-  const ballContent = ball.querySelector('.minimax-ball-content');
-  ballContent.addEventListener('click', function (e) {
-    e.stopPropagation();
-    window.open('https://agent.minimax.io/', '_blank');
-    ball.style.transform = 'scale(0.95)';
-    setTimeout(() => {
-      ball.style.transform = 'scale(1)';
-    }, 100);
-  });
+  function showLoading(show) {
+    document.getElementById('loading-spinner').classList.toggle('hidden', !show);
+  }
 
-  // Handle close button click
-  const closeIcon = ball.querySelector('.minimax-close-icon');
-  closeIcon.addEventListener('click', function (e) {
-    e.stopPropagation();
-    ball.style.opacity = '0';
-    ball.style.transform = 'translateY(20px)';
-
-    setTimeout(() => {
-      ball.style.display = 'none';
-    }, 300);
-  });
-}
-
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', initFloatingBall); 
+  // تهيئة Firebase (ديناميكية)
+  async function initFirebase() {
+    try {
+      // Load Firebase scripts dynamically
+      await import('https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js');
+      await import('https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js');
+      await import('https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js');
+      
+      const { initializeApp } = await import('https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js');
+      const { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } = await import('https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js');
+      const { getFirestore, doc, setDoc, getDoc } = await import('https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js');
+      
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+      
+      window.auth = auth;
+      window.db = db;
+      window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+      window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+      window.signOut = signOut;
+      window.doc = doc;
+      window.setDoc = setDoc;
+      window.getDoc = getDoc;
+      
+      // مراقبة حالة المستخدم
+      onAuthStateChanged(auth, async (user) => {
+        currentUser = user;
+        if (user) {
+          document.getElementById('auth-screen').classList.add('hidden');
+          document.getElementById('app-shell').classList.remove('hidden');
+          document.getElementById('sync-pharmacy').textContent = user.email;
+          showToast(`مرحباً ${user.email}`, 'success');
+          await loadUserData(user.uid);
+        } else {
+          document.getElementById('auth-screen').classList.remove('hidden');
+          document.getElementById('app-shell').classList.add('hidden');
+        }
+      });
+      
+      showToast('✅ Firebase جاهز', 'success');
+    } catch (error) {
+      console.error('Firebase error:', error);
+      showToast('❌ خطأ في Firebase: ' + error.message, 'error');
+    }
+  }
+  
+  async function loadUserData(uid) {
+    showLoading(true);
+    try {
+      const userDoc = await window.getDoc(window.doc(window.db, 'pharmacies', uid));
+      if (userDoc.exists()) {
+        const data = userDoc.data();
+        if (data.shortages) localStorage.setItem('shortages', JSON.stringify(data.shortages));
+        if (data.expiring) localStorage.setItem('expiring', JSON.stringify(data.expiring));
+        if (data.patients) localStorage.setItem('patients', JSON.stringify(data.patients));
+        showToast('تم تحميل البيانات من السحابة', 'success');
+      }
+      renderLists();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      showLoading(false);
+    }
+  }
+  
+  async function saveAllToCloud() {
+    if (!currentUser) return;
+    showLoading(true);
+    try {
+      await window.setDoc(window.doc(window.db, 'pharmacies', currentUser.uid), {
+        shortages: JSON.parse(localStorage.getItem('shortages') || '[]'),
+        expiring: JSON.parse(localStorage.getItem('expiring') || '[]'),
+        patients: JSON.parse(localStorage.getItem('patients') || '[]'),
+        lastSync: new Date().toISOString()
+      }, { merge: true });
+      showToast('✅ تم حفظ البيانات في السحابة', 'success');
+    } catch (error) {
+      showToast('❌ فشل الحفظ: ' + error.message, 'error');
+    } finally {
+      showLoading(false);
+    }
+  }
+  
+  function renderLists() {
+    const shortages = JSON.parse(localStorage.getItem('shortages') || '[]');
+    document.getElementById('shortages-list').innerHTML = shortages.length ? shortages.map(s => `<div>📦 ${s.name} - الكمية: ${s.quantity || 1}</div>`).join('') : '<div>لا توجد نواقص</div>';
+    
+    const expiring = JSON.parse(localStorage.getItem('expiring') || '[]');
+    document.getElementById('expiring-list').innerHTML = expiring.length ? expiring.map(e => `<div>⏰ ${e.name} - ينتهي: ${e.expiryDate}</div>`).join('') : '<div>لا توجد أصناف</div>';
+    
+    const patients = JSON.parse(localStorage.getItem('patients') || '[]');
+    document.getElementById('patients-list').innerHTML = patients.length ? patients.map(p => `<div>💊 ${p.name} - ${p.phone || ''}</div>`).join('') : '<div>لا يوجد مرضى</div>';
+  }
+  
+  function addSampleData() {
+    if (!localStorage.getItem('shortages')) localStorage.setItem('shortages', JSON.stringify([{ name: 'بنادول إكسترا', quantity: 20, priority: 'urgent' }]));
+    if (!localStorage.getItem('expiring')) localStorage.setItem('expiring', JSON.stringify([{ name: 'فيتامين C', expiryDate: '2025-03-01', quantity: 15 }]));
+    if (!localStorage.getItem('patients')) localStorage.setItem('patients', JSON.stringify([{ name: 'أحمد علي', phone: '777123456', condition: 'سكري' }]));
+    renderLists();
+  }
+  
+  // إعداد مستمعي الأحداث
+  function setupEventListeners() {
+    // تسجيل الدخول
+    document.getElementById('auth-login').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      try {
+        await window.signInWithEmailAndPassword(window.auth, email, password);
+        showToast('تم تسجيل الدخول بنجاح', 'success');
+      } catch (err) {
+        document.getElementById('login-error').textContent = err.message;
+        document.getElementById('login-error').classList.remove('hidden');
+      }
+    });
+    
+    // إنشاء حساب
+    document.getElementById('auth-register').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('reg-email').value;
+      const password = document.getElementById('reg-password').value;
+      const password2 = document.getElementById('reg-password2').value;
+      if (password !== password2) {
+        document.getElementById('reg-error').textContent = 'كلمتا السر غير متطابقتين';
+        document.getElementById('reg-error').classList.remove('hidden');
+        return;
+      }
+      try {
+        await window.createUserWithEmailAndPassword(window.auth, email, password);
+        showToast('تم إنشاء الحساب بنجاح', 'success');
+      } catch (err) {
+        document.getElementById('reg-error').textContent = err.message;
+        document.getElementById('reg-error').classList.remove('hidden');
+      }
+    });
+    
+    // تسجيل الخروج
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      await window.signOut(window.auth);
+      showToast('تم تسجيل الخروج', 'info');
+    });
+    
+    // مزامنة
+    document.getElementById('sync-now-btn').addEventListener('click', saveAllToCloud);
+    
+    // إضافة نماذج
+    document.getElementById('add-shortage-btn').addEventListener('click', () => {
+      const name = prompt('اسم الصنف الناقص:');
+      if (name) {
+        const shortages = JSON.parse(localStorage.getItem('shortages') || '[]');
+        shortages.push({ name, quantity: 1, date: new Date().toISOString() });
+        localStorage.setItem('shortages', JSON.stringify(shortages));
+        renderLists();
+        saveAllToCloud();
+      }
+    });
+    
+    document.getElementById('add-expiring-btn').addEventListener('click', () => {
+      const name = prompt('اسم الصنف:');
+      const expiryDate = prompt('تاريخ الانتهاء (YYYY-MM-DD):');
+      if (name && expiryDate) {
+        const expiring = JSON.parse(localStorage.getItem('expiring') || '[]');
+        expiring.push({ name, expiryDate, quantity: 1 });
+        localStorage.setItem('expiring', JSON.stringify(expiring));
+        renderLists();
+        saveAllToCloud();
+      }
+    });
+    
+    document.getElementById('add-patient-btn').addEventListener('click', () => {
+      const name = prompt('اسم المريض:');
+      const phone = prompt('رقم الهاتف:');
+      if (name && phone) {
+        const patients = JSON.parse(localStorage.getItem('patients') || '[]');
+        patients.push({ name, phone, date: new Date().toISOString() });
+        localStorage.setItem('patients', JSON.stringify(patients));
+        renderLists();
+        saveAllToCloud();
+      }
+    });
+    
+    // التبويبات
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const tabName = tab.dataset.tab;
+        document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.add('hidden'));
+        document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+      });
+    });
+    
+    // تبويبات تسجيل الدخول
+    document.querySelectorAll('.auth-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const type = tab.dataset.authTab;
+        document.querySelectorAll('.auth-form').forEach(form => form.classList.add('hidden'));
+        document.getElementById(`auth-${type}`).classList.remove('hidden');
+        document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+      });
+    });
+  }
+  
+  // بدء التطبيق
+  (async function start() {
+    addSampleData();
+    await initFirebase();
+    setupEventListeners();
+  })();
 </script>
 </body>
 </html>
